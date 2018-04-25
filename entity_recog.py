@@ -44,17 +44,20 @@ class entity_recognizer():
                 f.write(' '.join(entity) + "\n")
         self.entity_logger.info("Entites printed to {}".format(output_file))
 
-    def printAsXML(self):
+    def printAsXML(self, printToScreen=True, printToFile = False, output_file_name = None):
         xml = xmlHandler.xmlHandler(rootNodeName="entities")
-        #xml.makeElement(tag = "entity", attr=["text", "type"])
-        #lol =
+        root = xml.getRootNode()
         for entity in self.prettyEntities:
-            xml.makeElement(tag = "entity", text=entity[1], attr=entity[0])
-            #xml.addSubElement("entities", text=entity, itemType=lol)
-        xml.prettyPrintToScreen()
-
+            xml.addSubElement(root,"entity", text=entity[1], attr= {"entity-type":entity[0]})
+        if printToScreen:
+            xml.prettyPrintToScreen()
+        if printToFile:
+            if output_file_name:
+                xml.printTreeToFile(output_file_name)
+            else:
+                self.entity_logger.error("FATAL ERROR: Filepath not defined. XML cannot be printed")
 
 test_class = entity_recognizer()
 test_class.extractEntities(test_string)
 test_class.printEntitiesToFile("test_output.txt")
-test_class.printAsXML()
+test_class.printAsXML(False,True, "test.xml")
