@@ -35,15 +35,26 @@ class entity_recognizer():
         tags = {"I-LOC" : "Lokasjon", "I-PER" : "Person", "I-ORG" : "Organisasjon"}
         self.prettyEntities = []
         for entity in self.entities:
-            self.prettyEntities.append(str(tags[entity.tag]) + ":::"+ ' '.join((entity)))
+            self.prettyEntities.append((str(tags[entity.tag]) , ' '.join((entity))))
 
     def printEntitiesToFile(self,output_file):
         self.formatEntities()
         with open(output_file, "w") as f:
             for entity in self.prettyEntities:
-                f.write(entity + "\n")
+                f.write(' '.join(entity) + "\n")
         self.entity_logger.info("Entites printed to {}".format(output_file))
+
+    def printAsXML(self):
+        xml = xmlHandler.xmlHandler(rootNodeName="entities")
+        #xml.makeElement(tag = "entity", attr=["text", "type"])
+        #lol =
+        for entity in self.prettyEntities:
+            xml.makeElement(tag = "entity", text=entity[1], attr=entity[0])
+            #xml.addSubElement("entities", text=entity, itemType=lol)
+        xml.prettyPrintToScreen()
+
 
 test_class = entity_recognizer()
 test_class.extractEntities(test_string)
 test_class.printEntitiesToFile("test_output.txt")
+test_class.printAsXML()
