@@ -42,7 +42,7 @@ class entity_recognizer():
             self.prettyEntities.append((str(tags[entity.tag]) , ' '.join((entity))))
 
     def extractPositionOfEntity(self, entity):
-        print("Her skal posisjonene til entitetene ekstraheres")
+        self.entity_logger.info("Finding positions of entity: {}".format(entity))
         tokenized_text = nltk.word_tokenize(self.text.replace("-", " "), language = "norwegian")
         positions_of_entity = []
         for word in enumerate(tokenized_text):
