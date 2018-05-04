@@ -4,9 +4,9 @@ import os
 import xmlHandler
 from sandboxLogger import SandboxLogger
 import nltk
-tekst_fil = "test.txt"
-with open(tekst_fil) as f:
-    test_string = f.read()
+#tekst_fil = "test2.txt"
+#with open(tekst_fil) as f:
+#    test_string = f.read()
 
 
 class entity_recognizer():
@@ -43,10 +43,11 @@ class entity_recognizer():
 
     def extractPositionOfEntity(self, entity):
         self.entity_logger.info("Finding positions of entity: {}".format(entity))
-        tokenized_text = nltk.word_tokenize(self.text.replace("-", " "), language = "norwegian")
+        self.text.replace("-", " - ")
+        tokenized_text = nltk.word_tokenize(self.text, language="norwegian")
+
         positions_of_entity = []
         for word in enumerate(tokenized_text):
-
             if entity.split()[0] == word[1]:
                     positions_of_entity.append(word[0])
         return positions_of_entity
@@ -59,13 +60,13 @@ class entity_recognizer():
             for entity in self.prettyEntities:
                 f.write(' '.join(entity) + "\n")
         self.entity_logger.info("Entites printed to {}".format(output_file))
+    #def processFolderOfTexts(self, input_folder, output_folder):
 
     def printAsXML(self, printToScreen=True, printToFile = False, output_file_name = None):
         xml = xmlHandler.xmlHandler(rootNodeName="entities")
         root = xml.getRootNode()
         for entity in self.prettyEntities:
             entity_length = self.getLengthOfEntity(entity[1])
-            print(entity[1])
             entity_position = self.extractPositionOfEntity(entity = entity[1])
             xml.addSubElement(root,"entity", attr= {"entity-type":entity[0], "entitet":entity[1], "entity_length" : str(entity_length),
                                                     "entity_positions" : entity_position})
@@ -77,9 +78,9 @@ class entity_recognizer():
             else:
                 self.entity_logger.error("FATAL ERROR: Filepath not defined. XML cannot be printed")
 
-test_class = entity_recognizer()
-test_class.extractEntities(test_string)
-test_class.printEntitiesToFile("test_output.txt")
-test_class.printAsXML(True,False, "test.xml")
+#test_class = entity_recognizer()
+#test_class.extractEntities(test_string)
+#test_class.printEntitiesToFile("test_output.txt")
+#test_class.printAsXML(True,False, "test.xml")
 #test_class.extractPositionOfEntity()
 #print(test_class.entities)

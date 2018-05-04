@@ -1,23 +1,6 @@
-Person Lisa
-Organisasjon Amazon
-Person Jeff Bezos
-Lokasjon Alta
-Person Lisa Romsdal Kristensen
-Lokasjon Alta
-Organisasjon Amazon
-Person Jeff Bezos
-Person MacKenzie Bezos
-Person Lisa Romsdal Kristensen
-Lokasjon Alta
-Person Kristensen
-Organisasjon NRK
-Person Kristensen
-Person Kristensen
-Person Kristensen
-Person Jeff Bezos
-Lokasjon Finnmark
-Lokasjon Luleå
-Person Kristensen
-Organisasjon NRK
-Person Sonja
-Person Jeff
+Organisasjon Nasjonalbiblioteket
+Lokasjon norsk
+Lokasjon Norge
+Organisasjon Nasjonalbiblioteket
+Lokasjon Oslo
+Person Aslak Sira Myhre
