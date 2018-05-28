@@ -1,9 +1,11 @@
 from polyglot.text import Text
 import sys
+sys.path.append("/home/tensor")
 import os
-import xmlHandler
-from sandboxLogger import SandboxLogger
+from pythonlibs.xmlHandler import xmlHandler
+from pythonlibs.sandboxLogger import SandboxLogger
 import nltk
+sys.path.append("/home/tensor/pythonlibs")
 #tekst_fil = "test2.txt"
 #with open(tekst_fil) as f:
 #    test_string = f.read()
@@ -25,7 +27,7 @@ class entity_recognizer():
         if text:
             self.text =text
             self.entities = Text(self.text).entities
-            self.entity_logger.info(message = "Ekstraksjon av entiteter gjennomført fra tekst-string")
+            self.entity_logger.info(message = "Ekstraksjon av entiteter gjennomfort fra tekst-string")
         if filePath:
             if  os.path.isfile(filePath):
                 with open(filePath) as f:
@@ -48,7 +50,7 @@ class entity_recognizer():
 
         positions_of_entity = []
         for word in enumerate(tokenized_text):
-            if entity.split()[0] == word[1]:
+            if entity.split()[0].lower() == word[1].lower():
                     positions_of_entity.append(word[0])
         return positions_of_entity
 
@@ -63,13 +65,16 @@ class entity_recognizer():
     #def processFolderOfTexts(self, input_folder, output_folder):
 
     def printAsXML(self, printToScreen=True, printToFile = False, output_file_name = None):
-        xml = xmlHandler.xmlHandler(rootNodeName="entities")
+        xml = xmlHandler(inputXmlFile = None, rootNodeName="entities")
         root = xml.getRootNode()
         for entity in self.prettyEntities:
             entity_length = self.getLengthOfEntity(entity[1])
             entity_position = self.extractPositionOfEntity(entity = entity[1])
-            xml.addSubElement(root,"entity", attr= {"entity-type":entity[0], "entitet":entity[1], "entity_length" : str(entity_length),
-                                                    "entity_positions" : entity_position})
+            attrib = {"entity-type":entity[0], "entity_length" : str(entity_length), "entity_positions" : entity_position}
+          # xml.addSubElement(root,"entity",text=entity[1], attr= {"entity-type":entity[0], "entity_length" : str(entity_length),
+          #                                          "entity_positions" : entity_position})
+            nn = xml.makeElement("entity", entity[1],attrib)
+            xml.addNode(nn)
         if printToScreen:
             xml.prettyPrintToScreen()
         if printToFile:
