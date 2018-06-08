@@ -6,10 +6,6 @@ from pythonlibs.xmlHandler import xmlHandler
 from pythonlibs.sandboxLogger import SandboxLogger
 import nltk
 sys.path.append("/home/tensor/pythonlibs")
-#tekst_fil = "test2.txt"
-#with open(tekst_fil) as f:
-#    test_string = f.read()
-
 
 class entity_recognizer():
     def __init__(self):
@@ -26,12 +22,15 @@ class entity_recognizer():
            sys.exit(0)
         if text:
             self.text =text
+            self.text.replace("-", " - ")
+            self.text.replace("-"," ")
             self.entities = Text(self.text).entities
             self.entity_logger.info(message = "Ekstraksjon av entiteter gjennomfort fra tekst-string")
         if filePath:
             if  os.path.isfile(filePath):
                 with open(filePath) as f:
                     self.text = f.read()
+                self.text.replace("-", " - ")
                 self.entities = Text(self.text).entities
                 self.entity_logger.info("Entities extracted from {}".format( filePath))
                 self.entity_logger.debug("Follow entitites: {} was extracted from file: {}".format(self.entities, filePath))
@@ -45,15 +44,21 @@ class entity_recognizer():
 
     def extractPositionOfEntity(self, entity):
         self.entity_logger.info("Finding positions of entity: {}".format(entity))
-        self.text.replace("-", " - ")
         tokenized_text = nltk.word_tokenize(self.text, language="norwegian")
 
         positions_of_entity = []
-        for word in enumerate(tokenized_text):
-            if entity.split()[0].lower() == word[1].lower():
-                    positions_of_entity.append(word[0])
+        for i in range(0,len(tokenized_text)):
+            entity_len = len(entity.split())
+            if i<len(tokenized_text)-entity_len:
+                    comp_str = ' '.join(tokenized_text[i:i+entity_len]).lower()
+                    comp_str.replace("-","")
+                    comp_str.replace("&"," ")
+                    if entity.lower() == comp_str:
+                        positions_of_entity.append(i)
         return positions_of_entity
-
+    def currentPosition(entity):
+        current_position = 0 
+        return currentPosition
     def getLengthOfEntity(self, entity):
         return(len(entity.split()))
 
@@ -68,13 +73,15 @@ class entity_recognizer():
         xml = xmlHandler(inputXmlFile = None, rootNodeName="entities")
         root = xml.getRootNode()
         for entity in self.prettyEntities:
+            entity_text = entity[1].replace('&',' ')
+            entity_text = entity_text.replace('<', ' ')
+            entity_text = entity_text.replace('>', ' ')
             entity_length = self.getLengthOfEntity(entity[1])
             entity_position = self.extractPositionOfEntity(entity = entity[1])
-            attrib = {"entity-type":entity[0], "entity_length" : str(entity_length), "entity_positions" : entity_position}
-          # xml.addSubElement(root,"entity",text=entity[1], attr= {"entity-type":entity[0], "entity_length" : str(entity_length),
-          #                                          "entity_positions" : entity_position})
-            nn = xml.makeElement("entity", entity[1],attrib)
-            xml.addNode(nn)
+            if entity_length <4:
+                  attrib = {"entity_type":entity[0], "entity_length" : str(entity_length), "entity_positions" : entity_position}
+                  nn = xml.makeElement("entity", entity_text,attrib)
+                  xml.addNode(nn)
         if printToScreen:
             xml.prettyPrintToScreen()
         if printToFile:
