@@ -42,7 +42,7 @@ def getEntitiesFromAllTextsInSubFolders(input_folder, output_folder):
            os.makedirs(current_output_folder)       
 
         getEntitiesFromAllTextsInFolder(path, current_output_folder)
-        print(str(i) +"/" + str(len(folder_path)) + "is done")
+        print(str(i) +"/" + str(len(path)) + "is done")
 if __name__ == "__main__":
   getEntitiesFromAllTextsInSubFolders("/disk1/aw_experiments/aw_avisText", "/disk1/aw_experiments/entity_recognized/avis_entities")
   #print(getNameOfSubfolders("/disk1/avisText"))    
