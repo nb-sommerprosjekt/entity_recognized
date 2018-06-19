@@ -24,16 +24,16 @@ class entity_recognizer():
             self.text =text
             self.text.replace("-", " - ")
             self.text.replace("-"," ")
-            self.entities = Text(self.text).entities
+            self.entities = Text(self.text, hint_language_code ='no').entities
             self.entity_logger.info(message = "Ekstraksjon av entiteter gjennomfort fra tekst-string")
         if filePath:
             if  os.path.isfile(filePath):
                 with open(filePath) as f:
                     self.text = f.read()
                 self.text.replace("-", " - ")
-                self.entities = Text(self.text).entities
+                self.entities = Text(self.text, hint_language_code = 'no').entities
                 self.entity_logger.info("Entities extracted from {}".format( filePath))
-                self.entity_logger.debug("Follow entitites: {} was extracted from file: {}".format(self.entities, filePath))
+                self.entity_logger.info("Following entitites: {} was extracted from file: {}".format(self.entities, filePath))
         self.formatEntities()
 
     def formatEntities(self):
@@ -66,7 +66,7 @@ class entity_recognizer():
         with open(output_file, "w") as f:
             for entity in self.prettyEntities:
                 f.write(' '.join(entity) + "\n")
-        self.entity_logger.info("Entites printed to {}".format(output_file))
+        self.entity_logger.debug("Entites printed to {}".format(output_file))
     #def processFolderOfTexts(self, input_folder, output_folder):
 
     def printAsXML(self, printToScreen=True, printToFile = False, output_file_name = None):
