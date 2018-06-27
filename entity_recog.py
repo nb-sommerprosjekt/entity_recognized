@@ -90,9 +90,4 @@ class entity_recognizer():
             else:
                 self.entity_logger.error("FATAL ERROR: Filepath not defined. XML cannot be printed")
 
-#test_class = entity_recognizer()
-#test_class.extractEntities(test_string)
-#test_class.printEntitiesToFile("test_output.txt")
-#test_class.printAsXML(True,False, "test.xml")
-#test_class.extractPositionOfEntity()
-#print(test_class.entities)
+
